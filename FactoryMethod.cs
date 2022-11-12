@@ -1,4 +1,4 @@
-class Program   //Factory Method
+class Factrory   //Factory Method
 {
     static void Main(string[] args)
     {
