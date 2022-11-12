@@ -23,8 +23,9 @@ abstract class Developer
     // Factory Method
     abstract public House Create();
 }
+
 // build panel houses
-class PanelDeveloper : Developer
+internal class PanelDeveloper : Developer
 {
     public PanelDeveloper(string n) : base(n)
     { }
@@ -34,8 +35,9 @@ class PanelDeveloper : Developer
         return new PanelHouse();
     }
 }
+
 // build wooden houses
-class WoodDeveloper : Developer
+internal class WoodDeveloper : Developer
 {
     public WoodDeveloper(string n) : base(n)
     { }
@@ -49,14 +51,15 @@ class WoodDeveloper : Developer
 abstract class House
 { }
 
-class PanelHouse : House
+internal class PanelHouse : House
 {
     public PanelHouse()
     {
         Console.WriteLine("Panel house is builded");
     }
 }
-class WoodHouse : House
+
+internal class WoodHouse : House
 {
     public WoodHouse()
     {
