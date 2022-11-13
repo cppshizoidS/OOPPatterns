@@ -84,15 +84,9 @@ class Baker
 // строитель для ржаного хлеба
 class RyeBreadBuilder : BreadBuilder
 {
-    public override void SetFlour()
-    {
-        this.Bread.Flour = new Flour { Sort = "Rye flour fist sort" };
-    }
+    public override void SetFlour() => Bread.Flour = new Flour { Sort = "Rye flour fist sort" };
 
-    public override void SetSalt()
-    {
-        this.Bread.Salt = new Salt();
-    }
+    public override void SetSalt() => Bread.Salt = new Salt();
 
     public override void SetAdditives()
     {
@@ -102,18 +96,9 @@ class RyeBreadBuilder : BreadBuilder
 // строитель для пшеничного хлеба
 class WheatBreadBuilder : BreadBuilder
 {
-    public override void SetFlour()
-    {
-        this.Bread.Flour = new Flour { Sort = "Wheat flour highest sort" };
-    }
+    public override void SetFlour() => this.Bread.Flour = new Flour { Sort = "Wheat flour highest sort" };
 
-    public override void SetSalt()
-    {
-        this.Bread.Salt = new Salt();
-    }
+    public override void SetSalt() => this.Bread.Salt = new Salt();
 
-    public override void SetAdditives()
-    {
-        this.Bread.Additives = new Additives { Name = "bakery improver" };
-    }
+    public override void SetAdditives() => this.Bread.Additives = new Additives { Name = "bakery improver" };
 }
