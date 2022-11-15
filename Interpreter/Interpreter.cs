@@ -21,7 +21,7 @@ class Program
         );
  
         int result = expression.Interpret(context);
-        Console.WriteLine("результат: {0}", result);
+        Console.WriteLine("Result: {0}", result);
  
         Console.Read();
     }
