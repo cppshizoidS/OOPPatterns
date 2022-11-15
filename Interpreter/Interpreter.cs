@@ -1,67 +1,102 @@
-class Interpreter
+class Program
 {
     static void Main(string[] args)
     {
-        Receiver receiver = new Receiver(false, true, true);
+        Context context = new Context();
 
-        PaymentHandler bankPaymentHandler = new BankPaymentHandler();
-        PaymentHandler moneyPaymentHadler = new MoneyPaymentHandler();
-        PaymentHandler paypalPaymentHandler = new PayPalPaymentHandler();
-        bankPaymentHandler.Successor = paypalPaymentHandler;
-        paypalPaymentHandler.Successor = moneyPaymentHadler;
+        int x = 5;
+        int y = 8;
+        int z = 2;
+         
 
-        bankPaymentHandler.Handle(receiver);
+        context.SetVariable("x", x);
+        context.SetVariable("y", y);
+        context.SetVariable("z", z);
 
+        IExpression expression = new SubtractExpression(
+            new AddExpression(
+                new NumberExpression("x"), new NumberExpression("y")
+            ),
+            new NumberExpression("z")
+        );
+ 
+        int result = expression.Interpret(context);
+        Console.WriteLine("результат: {0}", result);
+ 
         Console.Read();
     }
 }
-
-class Receiver
+ 
+class Context
 {
-    public bool BankTransfer { get; set; }
-    public bool MoneyTransfer { get; set; }
-    public bool PayPalTransfer { get; set; }
-    public Receiver(bool bt, bool mt, bool ppt)
+    Dictionary<string, int> variables;
+    public Context()
     {
-        BankTransfer = bt;
-        MoneyTransfer = mt;
-        PayPalTransfer = ppt;
+        variables = new Dictionary<string, int>();
     }
-}
-abstract class PaymentHandler
-{
-    public PaymentHandler? Successor { get; set; }
-    public abstract void Handle(Receiver receiver);
-}
 
-class BankPaymentHandler : PaymentHandler
-{
-    public override void Handle(Receiver receiver)
+    public int GetVariable(string name)
     {
-        if (receiver.BankTransfer == true)
-            Console.WriteLine("We carry out a bank transfer");
-        else if (Successor != null)
-            Successor.Handle(receiver);
+        return variables[name];
+    }
+ 
+    public void SetVariable(string name, int value)
+    {
+        if (variables.ContainsKey(name))
+            variables[name] = value;
+        else
+            variables.Add(name, value);
     }
 }
 
-class PayPalPaymentHandler : PaymentHandler
+interface IExpression
 {
-    public override void Handle(Receiver receiver)
+    int Interpret(Context context);
+}
+
+class NumberExpression : IExpression
+{
+    string name;
+    public NumberExpression(string variableName)
     {
-        if (receiver.PayPalTransfer == true)
-            Console.WriteLine("Make a transfer via PayPal");
-        else if (Successor != null)
-            Successor.Handle(receiver);
+        name = variableName;
+    }
+    public int Interpret(Context context)
+    {
+        return context.GetVariable(name);
     }
 }
-class MoneyPaymentHandler : PaymentHandler
+
+class AddExpression : IExpression
 {
-    public override void Handle(Receiver receiver)
+    IExpression leftExpression;
+    IExpression rightExpression;
+ 
+    public AddExpression(IExpression left, IExpression right)
     {
-        if (receiver.MoneyTransfer == true)
-            Console.WriteLine("We carry out transfers through money transfer systems");
-        else if (Successor != null)
-            Successor.Handle(receiver);
+        leftExpression = left;
+        rightExpression = right;
+    }
+ 
+    public int Interpret(Context context)
+    {
+        return leftExpression.Interpret(context) + rightExpression.Interpret(context);
+    }
+}
+
+class SubtractExpression : IExpression
+{
+    IExpression leftExpression;
+    IExpression rightExpression;
+ 
+    public SubtractExpression(IExpression left, IExpression right)
+    {
+        leftExpression = left;
+        rightExpression = right;
+    }
+ 
+    public int Interpret(Context context)
+    {
+        return leftExpression.Interpret(context) - rightExpression.Interpret(context);
     }
 }
