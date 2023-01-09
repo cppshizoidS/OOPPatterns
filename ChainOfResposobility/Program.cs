@@ -28,6 +28,7 @@ class Receiver
         PayPalTransfer = ppt;
     }
 }
+
 abstract class PaymentHandler
 {
     public PaymentHandler Successor { get; set; }
@@ -55,6 +56,7 @@ class PayPalPaymentHandler : PaymentHandler
             Successor.Handle(receiver);
     }
 }
+
 class MoneyPaymentHandler : PaymentHandler
 {
     public override void Handle(Receiver receiver)
